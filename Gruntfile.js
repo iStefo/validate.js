@@ -14,17 +14,27 @@ module.exports = function(grunt) {
         }
       },
       validate: {
-        src: '<%= pkg.name %>',
+        src: 'validate.es6.js',
         options: {
           laxcomma: true,
           curly: true
         }
+      },
+      options: {
+        esnext: true
       }
     },
     watch: {
       jshintGruntfile: {
         files: 'Gruntfile.js',
         tasks: ['jshint:gruntfile'],
+        options: {
+          atBegin: true
+        }
+      },
+      babel: {
+        files: 'validate.es6.js',
+        tasks: ['babel'],
         options: {
           atBegin: true
         }
@@ -48,6 +58,18 @@ module.exports = function(grunt) {
         tasks: ['jasmine:specs', 'jasmine:coverage'],
         options: {
           atBegin: true
+        }
+      }
+    },
+    babel: {
+      options: {
+        sourceMap: true,
+        modules: "ignore",
+        blacklist: ["strict"]
+      },
+      dist: {
+        files: {
+          "<%= pkg.name %>": "validate.es6.js"
         }
       }
     },
@@ -118,8 +140,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-docco');
   grunt.loadNpmTasks('grunt-notify');
+  grunt.loadNpmTasks('grunt-babel');
 
   grunt.registerTask('default', 'watch');
-  grunt.registerTask('build', ['jshint:validate', 'jasmine:specs', 'uglify', 'docco']);
-  grunt.registerTask('test', ['jshint', 'jasmine']);
+  grunt.registerTask('build', ['jshint:validate', 'babel', 'jasmine:specs', 'uglify', 'docco']);
+  grunt.registerTask('test', ['jshint', 'babel', 'jasmine']);
 };

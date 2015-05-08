@@ -1,0 +1,9 @@
+{
+  "undef": true,
+  "unused": true,
+  "esnext": true,
+  "predef": [
+    "moment",
+    "XDate"
+  ]
+}
